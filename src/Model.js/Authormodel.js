@@ -27,7 +27,3 @@ const authormodelchema=mongoose.Schema({
 },{timestamps:true})
 
 module.exports=mongoose.model('Authormodel',authormodelchema)
-// { fname: { mandatory}, 
-// lname: {mandatory}, 
-// title: {mandatory, 
-//     enum[Mr, Mrs, Miss]}, email: {mandatory, valid email, unique}, password: {mandatory} }

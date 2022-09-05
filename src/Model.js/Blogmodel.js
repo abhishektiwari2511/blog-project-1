@@ -22,6 +22,11 @@ const blogmodelschema=mongoose.Schema({
     type:[],
     required:true
   },
+  deletedAt:{
+    type:Date,
+    default:null
+
+  },
   isDeleted:{
     type:Boolean,
     default:false
