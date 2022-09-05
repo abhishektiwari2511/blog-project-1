@@ -29,6 +29,7 @@
     "mongodb": "^4.8.1",
     "mongoose": "^6.5.4",
     "nodemon": "^2.0.19",
-    "underscore": "^1.13.3"
+    "underscore": "^1.13.3",
+    "validator": "^13.7.0"
   }
 }
