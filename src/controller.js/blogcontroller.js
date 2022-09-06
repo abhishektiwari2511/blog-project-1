@@ -23,4 +23,22 @@ const createblog = async (req, res)=>{
 
 }
 
+const blogsUpdate = async (req,res)=> {
+    try {
+        let id = req.params.blogid 
+         let blogid = await Blogmodel.findById(id)
+         console.log(blogid);
+        if(blogid.isDeleted == true ){
+            res.status(404).send("unable to update")
+        } 
+         blog = await Blogmodel.findOneAndUpdate({_id : id}, {$set :req.body} ).select({title: 1 , body :1 , tag :1 , subcategory :1 , isPublihed : true   });
+         res.status(200).send(blog)
+    
+        
+    } catch (error) {
+        return res.status(500).send({status:false,msg:error.message})
+    }
+}
+
 module.exports.createblog=createblog
+module.exports.blogsUpdate=blogsUpdate
