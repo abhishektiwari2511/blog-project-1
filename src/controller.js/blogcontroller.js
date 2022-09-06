@@ -66,6 +66,66 @@ const deleted = async function (req, res) {
     }
 }
 
+const deleteblog = async function (req, res) {
+
+    try {
+
+        let authorId = req.query.authorId
+        let categoryname = req.query.category
+        let tagname = req.query.tags
+        let subcategoryname = req.query.subcategory
+        let unpublished = req.query.isPublished
+
+        let Blog = await Blogmodel.findById(authorId)
+
+       
+        if (authorId) {
+
+            let deleteblog = await Blogmodel.findOneAndUpdate({ authorId: authorId }, { isDeleted: true }, { new: true })
+
+            return res.status(200).send({ status: true, data: deleteblog })
+
+        }
+
+        if (categoryname) {
+
+            let deleteblog = await Blogmodel.findOneAndUpdate({ category: categoryname }, { isDeleted: true }, { new: true })
+
+            return res.status(200).send({ status: true, data: deleteblog })
+
+        }
+
+        if (tagname) {
+
+            let deleteblog = await Blogmodel.findOneAndUpdate({ tags: tagname }, { isDeleted: true }, { new: true })
+
+            return res.status(200).send({ status: true, data: deleteblog })
+
+        }
+
+
+        if (subcategoryname) {
+            let deleteblog = await Blogmodel.findOneAndUpdate({ subcategory: categoryname }, { isDeleted: true }, { new: true })
+
+            return res.status(200).send({ status: true, data: deleteblog })
+        }
+
+        if (unpublished) {
+
+            let deleteblog = await Blogmodel.findOneAndUpdate({ isPublished: unpublished }, { isDeleted: true }, { new: true })
+
+            return res.status(200).send({ status: true, data: deleteblog })
+        }
+    }
+
+    catch (error) {
+        return res.status(500).send({ error: error.message })
+    }
+
+}
+
+
 module.exports.createblog=createblog
 module.exports.blogsUpdate=blogsUpdate
 module.exports.deleted=deleted
+module.exports.deleteblog = deleteblog
