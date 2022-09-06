@@ -23,6 +23,67 @@ const createblog = async (req, res)=>{
 
 }
 
+const getblogs=async(req,res)=>{
+    try{
+        let authorId=req.query.authorId
+        let category=req.query.category
+        let tags=req.query.tags
+        let subcategory =req.query.subcategory
+        if((category && authorId && tags && subcategory)){
+            let blogs=await Blogmodel.find({subcategory:subcategory, authorId:authorId, tags:tags, subcategory:subcategory ,isDeleted:false,isPublished:true})
+            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given category subcategory tags and author id!!"}) : res.send({status:true,data:blogs})
+             
+        }
+        if(( authorId && category && subcategory)){
+            let blogs=await Blogmodel.find({subcategory:subcategory, authorId:authorId, subcategory:subcategory ,isDeleted:false,isPublished:true})
+            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given category subcategory tags and author id!!"}) : res.send({status:true,data:blogs})
+             
+        }
+        else if((category && subcategory)){
+            let blogs=await Blogmodel.find({subcategory:subcategory,category:category, isDeleted:false,isPublished:true})
+            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given category and subcategory!!"}) : res.send({status:true,data:blogs})
+    
+    
+        }
+        else if((authorId && category)){
+            let blogs=await Blogmodel.find({category:category, authorId:authorId, isDeleted:false,isPublished:true})
+            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given category and subcategory!!"}) : res.send({status:true,data:blogs})
+        }
+        else if((category && tags)){
+            let blogs=await Blogmodel.find({ authorId:authorId, tags:tags, isDeleted:false,isPublished:true})
+            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given tags!!"}) : res.send({status:true,data:blogs})
+        } 
+        else if(authorId){
+            let blogs=await Blogmodel.find({authorId:authorId, isDeleted:false,isPublished:true})
+            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given id!!"}) : res.send({status:true,data:blogs})
+        }
+        else if(category){
+            let blogs=await Blogmodel.find({category:category,isDeleted:false,isPublished:true})
+            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given category!!"}) : res.send({status:true,data:blogs})
+    
+        }
+        else if(subcategory){
+            let blogs=await Blogmodel.find({subcategory:subcategory,isDeleted:false,isPublished:true})
+            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given subcategory!!"}) : res.send({status:true,data:blogs})
+    
+        } 
+        else if(tags){
+            let blogs=await Blogmodel.find({tags:tags,isDeleted:false,isPublished:true})
+            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given tags!!"}) : res.send({status:true,data:blogs})
+    
+        }
+       
+        else{
+            let blogs=await Blogmodel.find({isDeleted:false,isPublished:true})
+            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available !!"}) : res.send({status:true,data:blogs})
+        }
+    }catch(error){
+        return res.status(500).send({ status: false, msg: error.message })
+    
+    }
+    
+    }
+
 const blogsUpdate = async (req,res)=> {
     try {
         let id = req.params.blogid 
@@ -126,6 +187,7 @@ const deleteblog = async function (req, res) {
 
 
 module.exports.createblog=createblog
+module.exports.getblogs=getblogs
 module.exports.blogsUpdate=blogsUpdate
 module.exports.deleted=deleted
 module.exports.deleteblog = deleteblog

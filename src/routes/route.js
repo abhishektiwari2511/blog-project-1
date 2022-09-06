@@ -6,6 +6,7 @@ const Blogcontroller=require('../controller.js/blogcontroller')
 
 router.post('/authors',authorController.createAuthor)
 router.post('/blogs',Blogcontroller.createblog)
+router.get('/blogs',Blogcontroller.getblogs)
 router.put('/blogs/:blogid',Blogcontroller.blogsUpdate)
 router.delete("/blogs/:blogId",Blogcontroller.deleted)
 router.delete('/deletekar',Blogcontroller.deleteblog)
