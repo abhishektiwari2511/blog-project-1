@@ -87,12 +87,17 @@ const getblogs=async(req,res)=>{
 const blogsUpdate = async (req,res)=> {
     try {
         let id = req.params.blogid 
+        let title = req.body.title
+        let body = req.body.body
+        let tags = req.body.tags
+        let subcategory = req.body.subcategory
+
          let blogid = await Blogmodel.findById(id)
          console.log(blogid);
         if(blogid.isDeleted == true ){
             res.status(404).send("unable to update")
         } 
-         blog = await Blogmodel.findOneAndUpdate({_id : id}, {$set :req.body} ).select({title: 1 , body :1 , tag :1 , subcategory :1 , isPublihed : true   });
+         blog = await Blogmodel.findOneAndUpdate({_id : id}, {$set :{title:title , body:body, tags: tags , subcategory:subcategory , isPublished :true} } ,{new : true} );
          res.status(200).send(blog)
     
         
