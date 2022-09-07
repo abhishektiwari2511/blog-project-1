@@ -35,8 +35,8 @@ const getblogs=async(req,res)=>{
              
         }
         if(( authorId && category && subcategory)){
-            let blogs=await Blogmodel.find({subcategory:subcategory, authorId:authorId, subcategory:subcategory ,isDeleted:false,isPublished:true})
-            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given category subcategory tags and author id!!"}) : res.send({status:true,data:blogs})
+            let blogs=await Blogmodel.find({subcategory:subcategory, authorId:authorId, category:category ,isDeleted:false,isPublished:true})
+            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given category subcategory and author id!!"}) : res.send({status:true,data:blogs})
              
         }
         else if((category && subcategory)){
@@ -46,12 +46,12 @@ const getblogs=async(req,res)=>{
     
         }
         else if((authorId && category)){
-            let blogs=await Blogmodel.find({category:category, authorId:authorId, isDeleted:false,isPublished:true})
-            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given category and subcategory!!"}) : res.send({status:true,data:blogs})
+            let blogs=await Blogmodel.find({ authorId:authorId, category:category, isDeleted:false,isPublished:true})
+            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given authorId and category!!"}) : res.send({status:true,data:blogs})
         }
         else if((category && tags)){
-            let blogs=await Blogmodel.find({ authorId:authorId, tags:tags, isDeleted:false,isPublished:true})
-            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given tags!!"}) : res.send({status:true,data:blogs})
+            let blogs=await Blogmodel.find({ category:category, tags:tags, isDeleted:false,isPublished:true})
+            blogs.length == 0 ? res.status(404).send({msg:"Blog are not available given tags and category!!"}) : res.send({status:true,data:blogs})
         } 
         else if(authorId){
             let blogs=await Blogmodel.find({authorId:authorId, isDeleted:false,isPublished:true})
