@@ -91,16 +91,16 @@ const blogsUpdate = async (req,res)=> {
         let body = req.body.body
         let tags = req.body.tags
         let subcategory = req.body.subcategory
-
          let blogid = await Blogmodel.findById(id)
-         console.log(blogid);
         if(blogid.isDeleted == true ){
-            res.status(404).send("unable to update")
+            res.status(404).send({status:false,msg:"Document already updated !!"})
         } 
-         blog = await Blogmodel.findOneAndUpdate({_id : id}, {$set :{title:title , body:body, tags: tags , subcategory:subcategory , isPublished :true , deletedAt: new Date()} } ,{new : true} );
-         res.status(200).send(blog)
-    
-        
+        let tag=blogid.tags
+        tag.push(tags)
+        let subcat=blogid.subcategory
+        subcat.push(subcategory)
+         blog = await Blogmodel.findOneAndUpdate({_id : id}, {$set :{title:title , body:body, tags: tag , subcategory:subcat , isPublished :true } } ,{new : true} );
+         res.status(200).send({status:true,data:blog})
     } catch (error) {
         return res.status(500).send({status:false,msg:error.message})
     }
@@ -109,7 +109,7 @@ const blogsUpdate = async (req,res)=> {
 const deleted = async function (req, res) {
     try {
         //Validate: The blogId is present in request path params or not.
-        let blog_Id = req.params.blogId
+        let blog_Id = req.params.blogid
         if (!blog_Id) return res.status(400).send({ status: false, msg: "Blog Id is required" })
 
         //Validate: The blogId is valid or not.
