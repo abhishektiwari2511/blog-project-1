@@ -5,16 +5,12 @@ const authmid = async (req, res, next) => {
         if (!token) {
             return res.status(400).send({ status: false, msg: "Header must be present !" })
         }
-        jwt.verify(token, "this is a secreat key", async function (err, valid) {
-            if (err) {
-                return res.status(400).send({ status: false, msg: "Invalid token !" })
-            }
-            if (valid) {
-                if (valid) { //here I checked user have permit to access this resources
-                    next()
-                }
-            }
-        });
+        let decode=jwt.verify(token,"this is a secreat key")
+        if(decode){
+            next()
+        }else{
+            return res.status(404).send({status:false,msg:"Invalid token"})
+        }
     } catch (error) {
         return res.status(500).send({ Error: error.message })
     }
