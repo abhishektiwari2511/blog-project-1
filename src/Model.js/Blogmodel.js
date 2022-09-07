@@ -31,6 +31,10 @@ const blogmodelschema=mongoose.Schema({
     type:Boolean,
     default:false
   },
+  ispublishedAt:{
+    type:Date,
+    default:null
+  },
   isPublished:{
     type:Boolean,
     default:false

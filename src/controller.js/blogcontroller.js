@@ -99,7 +99,7 @@ const blogsUpdate = async (req,res)=> {
         tag.push(tags)
         let subcat=blogid.subcategory
         subcat.push(subcategory)
-         blog = await Blogmodel.findOneAndUpdate({_id : id}, {$set :{title:title , body:body, tags: tag , subcategory:subcat , isPublished :true } } ,{new : true} );
+         blog = await Blogmodel.findOneAndUpdate({_id : id}, {$set :{title:title , body:body, tags: tag , subcategory:subcat , isPublished :true ,ispublishedAt:Date.now()} } ,{new : true} );
          res.status(200).send({status:true,data:blog})
     } catch (error) {
         return res.status(500).send({status:false,msg:error.message})
@@ -122,7 +122,7 @@ const deleted = async function (req, res) {
 
         //Delete a blog by changing the its isDeleted to true.
         let deletedBlog = await Blogmodel.findOneAndUpdate({ _id: blog_Id },
-            { $set: { isDeleted: true } }, { new: true })
+            { $set: { isDeleted: true ,deletedAt:Date.now() } }, { new: true })
         //Sending the Deleted response after updating isDeleted : true
         return res.status(200).send({ status: true, msg: "Blog deleted succesfully" })
     }

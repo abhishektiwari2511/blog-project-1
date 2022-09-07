@@ -5,7 +5,7 @@ const jwt=require('jsonwebtoken')
 const authmiddleware = async (req, res, next) => {
     try {
         let id = req.params.blogid
-        console.log(id)
+        
         let blog = await Blogmodel.findById(id)
         if (!blog) {
             return res.status(404).send({status:false,msg:"blog is not found given id"})
@@ -25,7 +25,7 @@ const authmiddleware = async (req, res, next) => {
                 if (valid.userId == authorId) { //here I checked user have permit to access this resources
                     next()
                 } else {
-                    return res.status(403).send({ status: false, msg: "you have not authorized person!!" })
+                    return res.status(401).send({ status: false, msg: "you have not authorized person!!" })
                 }
             }
         });
