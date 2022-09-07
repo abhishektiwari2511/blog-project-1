@@ -3,10 +3,11 @@ const router=express.Router()
 
 const authorController = require('../controller.js/authorController')
 const Blogcontroller=require('../controller.js/blogcontroller')
+const Authmidd=require('../Middleware/auth-2')
 
 router.post('/authors',authorController.createAuthor)
-router.post('/blogs',Blogcontroller.createblog)
-router.get('/blogs',Blogcontroller.getblogs)
+router.post('/blogs', Authmidd.authmid ,Blogcontroller.createblog)
+router.get('/blogs' , Authmidd.authmid ,Blogcontroller.getblogs)
 router.put('/blogs/:blogid',Blogcontroller.blogsUpdate)
 router.delete("/blogs/:blogId",Blogcontroller.deleted)
 router.delete('/deletekar',Blogcontroller.deleteblog)
