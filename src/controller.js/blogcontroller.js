@@ -97,7 +97,7 @@ const blogsUpdate = async (req,res)=> {
         if(blogid.isDeleted == true ){
             res.status(404).send("unable to update")
         } 
-         blog = await Blogmodel.findOneAndUpdate({_id : id}, {$set :{title:title , body:body, tags: tags , subcategory:subcategory , isPublished :true} } ,{new : true} );
+         blog = await Blogmodel.findOneAndUpdate({_id : id}, {$set :{title:title , body:body, tags: tags , subcategory:subcategory , isPublished :true , deletedAt: new Date()} } ,{new : true} );
          res.status(200).send(blog)
     
         
@@ -122,7 +122,7 @@ const deleted = async function (req, res) {
 
         //Delete a blog by changing the its isDeleted to true.
         let deletedBlog = await Blogmodel.findOneAndUpdate({ _id: blog_Id },
-            { $set: { isDeleted: true, deletedAt: new Date() } }, { new: true })
+            { $set: { isDeleted: true,  } }, { new: true })
         //Sending the Deleted response after updating isDeleted : true
         return res.status(200).send({ status: true, msg: "Blog deleted succesfully" })
     }
