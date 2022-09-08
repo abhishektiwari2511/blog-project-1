@@ -1,16 +1,24 @@
 const authorModel = require('../Model.js/Authormodel')
 const jwt= require("jsonwebtoken")
+const validator=require('validator')
 
 
 const createAuthor = async (req, res)=>{
-
+ 
     try {
+        let body=req.body
         if (Object.keys(req.body).length == 0) {
             return res.status(400).send({ Error: "Body  should be not emety" })
         }
+        if(!(body.title && body.fname &&body.lname && body.password && body.email)){
+            return res.status(400).send({status:false,msg:"All field are required !"})
+        }
+        if(!validator.isEmail(body.email)){
+            return res.status(400).send({status:false, msg:"Please Provide Valid Email !"})
+        }
         let data = new authorModel(req.body)
         let result = await data.save()
-        res.status(201).send(result)
+        res.status(201).send({status:true, data:result})
     }
     catch (error) {
         return res.status(500).send({status:false,msg:error.message})
@@ -35,8 +43,8 @@ const login=async function(req,res){
 
          },"this is a secreat key")
          res.setHeader("x-api-key",token)
-         console.log(token)
-         res.status(200).send({status:true,msg:"you are successfuly log in", token:token})
+         
+         res.status(200).send({status:true, token:token})
 
 
 

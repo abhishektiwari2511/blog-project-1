@@ -93,9 +93,9 @@ const blogsUpdate = async (req,res)=> {
         let subcategory = req.body.subcategory
          let blogid = await Blogmodel.findById(id)
         if(blogid.isDeleted == true ){
-            res.status(404).send({status:false,msg:"Document already updated !!"})
+            res.status(404).send({status:false,msg:" This document already Deleted !!"})
         } 
-        let tag=blogid.tags
+        let tag=blogid.tags //[]
         tag.push(tags)
         let subcat=blogid.subcategory
         subcat.push(subcategory)
@@ -141,46 +141,31 @@ const deleteblog = async function (req, res) {
         let tagname = req.query.tags
         let subcategoryname = req.query.subcategory
         let unpublished = req.query.isPublished
-
         let Blog = await Blogmodel.findById(authorId)
-
-       
         if (authorId) {
-
-            let deleteblog = await Blogmodel.findOneAndUpdate({ authorId: authorId }, { isDeleted: true }, { new: true })
-
-            return res.status(200).send({ status: true, data: deleteblog })
-
+             await Blogmodel.findOneAndUpdate({ authorId: authorId }, { isDeleted: true,deletedAt:Date.now() }, { new: true })
+            return res.status(200).send({ status: true, msg:"Deleted Successfully" })
         }
-
         if (categoryname) {
-
-            let deleteblog = await Blogmodel.findOneAndUpdate({ category: categoryname }, { isDeleted: true }, { new: true })
-
-            return res.status(200).send({ status: true, data: deleteblog })
-
+            await Blogmodel.findOneAndUpdate({ category: categoryname }, { isDeleted: true,deletedAt:Date.now() }, { new: true })
+            return res.status(200).send({ status: true, msg:"Deleted Successfully"})
         }
 
         if (tagname) {
 
-            let deleteblog = await Blogmodel.findOneAndUpdate({ tags: tagname }, { isDeleted: true }, { new: true })
+             await Blogmodel.findOneAndUpdate({ tags: tagname }, { isDeleted: true ,deletedAt:Date.now()}, { new: true })
 
-            return res.status(200).send({ status: true, data: deleteblog })
+            return res.status(200).send({ status: true, msg:"Deleted Successfully" })
 
         }
-
-
         if (subcategoryname) {
-            let deleteblog = await Blogmodel.findOneAndUpdate({ subcategory: categoryname }, { isDeleted: true }, { new: true })
-
-            return res.status(200).send({ status: true, data: deleteblog })
+            await Blogmodel.findOneAndUpdate({ subcategory: categoryname }, { isDeleted: true ,deletedAt:Date.now()}, { new: true })
+            return res.status(200).send({ status: true, msg:"Deleted Successfully" })
         }
 
         if (unpublished) {
-
-            let deleteblog = await Blogmodel.findOneAndUpdate({ isPublished: unpublished }, { isDeleted: true }, { new: true })
-
-            return res.status(200).send({ status: true, data: deleteblog })
+             await Blogmodel.findOneAndUpdate({ isPublished: unpublished }, { isDeleted: true, deletedAt:Date.now() }, { new: true })
+            return res.status(200).send({ status: true, msg:"Deleted Successfully" })
         }
     }
 

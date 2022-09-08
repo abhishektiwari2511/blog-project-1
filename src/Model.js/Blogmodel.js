@@ -22,12 +22,7 @@ const blogmodelschema=mongoose.Schema({
     type:[],
     required:true
   },
-  deletedAt:{
-    type:Date,
-    default:null
-
-  },
-  isDeleted:{
+  isPublished:{
     type:Boolean,
     default:false
   },
@@ -35,13 +30,16 @@ const blogmodelschema=mongoose.Schema({
     type:Date,
     default:null
   },
-  isPublished:{
+  isDeleted:{
     type:Boolean,
     default:false
-  }
+  },
+  deletedAt:{
+    type:Date,
+    default:null
 
-
-
+  },
+  
 },{timestamps:true})
 module.exports=mongoose.model('Blogmodel',blogmodelschema)
 

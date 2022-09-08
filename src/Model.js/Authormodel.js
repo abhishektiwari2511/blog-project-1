@@ -18,11 +18,6 @@ const authormodelchema=mongoose.Schema({
     type:String,
     required:true,
     unique:true,
-    validate(value){
-      if(!validator.isEmail(value)){
-        throw new Error("Email Is not valid")
-      }
-    }
   },
   password:{
     type:String,

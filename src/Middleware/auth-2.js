@@ -9,10 +9,11 @@ const authmid = async (req, res, next) => {
         if(decode){
             next()
         }else{
-            return res.status(404).send({status:false,msg:"Invalid token"})
+            return res.status(400).send({status:false,msg:"Invalid token"})
         }
     } catch (error) {
         return res.status(500).send({ Error: error.message })
     }
 }
 module.exports.authmid=authmid
+
