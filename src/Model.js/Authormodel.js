@@ -1,5 +1,5 @@
 // const { Timestamp } = require('mongodb')
-const validator=require('validator')
+
 const mongoose=require('mongoose')
 const authormodelchema=mongoose.Schema({
   fname:{

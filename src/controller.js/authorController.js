@@ -2,6 +2,12 @@ const authorModel = require('../Model.js/Authormodel')
 const jwt= require("jsonwebtoken")
 const validator=require('validator')
 
+var passwordValidator = require('password-validator');
+var schema = new passwordValidator();
+
+
+
+
 
 const createAuthor = async (req, res)=>{
  
@@ -15,6 +21,10 @@ const createAuthor = async (req, res)=>{
         }
         if(!validator.isEmail(body.email)){
             return res.status(400).send({status:false, msg:"Please Provide Valid Email !"})
+        }
+        if(!validator.isStrongPassword(body.password)){
+            return res.status(400).send({status:false, msg:"Password must be contain 1 uppercase 1 lowercase special char and min 8 lenght"})
+
         }
         let data = new authorModel(req.body)
         let result = await data.save()
