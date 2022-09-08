@@ -2,6 +2,18 @@ const authorModel = require('../Model.js/Authormodel')
 const jwt= require("jsonwebtoken")
 const validator=require('validator')
 
+function isEmail(emailAdress){
+    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    // chanchal@gmail.com /^int/ /w= char  * = breakpoint  $ = End 
+    // /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/;
+
+  if (regex.test(emailAdress)) 
+    return true; 
+
+   else 
+    return false; 
+}
+
 
 
 
@@ -18,9 +30,11 @@ const createAuthor = async (req, res)=>{
         if(!(body.title && body.fname &&body.lname && body.password && body.email)){
             return res.status(400).send({status:false,msg:"All field are required !"})
         }
-        if(!validator.isEmail(body.email)){
-            return res.status(400).send({status:false, msg:"Please Provide Valid Email !"})
-        }
+         let emailvalid=isEmail(body.email)
+         if(emailvalid==false){
+            return res.status(400).send({status:false,msg:"Invalid email"})
+         }
+        
         if(!validator.isStrongPassword(body.password)){
             return res.status(400).send({status:false, msg:"Password must be contain 1 uppercase 1 lowercase special char and min 8 lenght"})
 
