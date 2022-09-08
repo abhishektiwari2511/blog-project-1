@@ -2,8 +2,6 @@ const authorModel = require('../Model.js/Authormodel')
 const jwt= require("jsonwebtoken")
 const validator=require('validator')
 
-var passwordValidator = require('password-validator');
-var schema = new passwordValidator();
 
 
 
@@ -13,6 +11,7 @@ const createAuthor = async (req, res)=>{
  
     try {
         let body=req.body
+        // 
         if (Object.keys(req.body).length == 0) {
             return res.status(400).send({ Error: "Body  should be not emety" })
         }

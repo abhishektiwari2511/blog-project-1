@@ -1,9 +1,12 @@
 // const Authormodel=require('../Model.js/Authormodel')
 const Blogmodel=require('../Model.js/Blogmodel')
 // const Authormodel=require('../Model.js/Authormodel')
+
+// Authorization
 const jwt=require('jsonwebtoken')
 const authmiddleware = async (req, res, next) => {
     try {
+        
         let id = req.params.blogid
         
         let blog = await Blogmodel.findById(id)
@@ -34,12 +37,12 @@ const authmiddleware = async (req, res, next) => {
 
 const filter = async (req, res, next) => {
     try {
+        let token = req.headers['x-api-key']
+        if (!token) {
+            return res.status(400).send({ status: false, msg: "Header must be present !" })
+        }
         let filter = req.query
         if (filter) {
-            let tokens = req.headers['x-api-key']
-            if (!tokens) {
-                return res.status(400).send({status:false,msg:"Header must be present !"})
-            }
             let blog = await Blogmodel.findOne(filter)
             if (!blog) {
                 return res.status(404).send({ status: false, msg: "blog is not found given filter" })
@@ -48,10 +51,7 @@ const filter = async (req, res, next) => {
                 return res.status(400).send({status:false, msg:"Already Deleted !!"})
             }
             let authorId = blog.authorId
-            let token = req.headers['x-api-key']
-            if (!token) {
-                return res.status(400).send({ status: false, msg: "Header must be present !" })
-            }
+          
             jwt.verify(token, "this is a secreat key", function (err, valid) {
                 if (err) {
                     return res.status(400).send({ status: false, msg: "Invalid token !" })

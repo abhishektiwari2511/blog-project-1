@@ -8,7 +8,7 @@ const authmiddleware=require('../Middleware/auth')
 
 
 router.post('/authors',authorController.createAuthor)
-router.post('/blogs', Authmidd.authmid ,Blogcontroller.createblog)
+router.post('/blogs', Authmidd.authmid  ,Blogcontroller.createblog)
 router.get('/blogs' , Authmidd.authmid ,Blogcontroller.getblogs)
 router.put('/blogs/:blogid',authmiddleware.authmiddleware ,Blogcontroller.blogsUpdate)
 router.delete("/blogs/:blogid" ,authmiddleware.authmiddleware ,Blogcontroller.deleted)

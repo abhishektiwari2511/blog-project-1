@@ -6,7 +6,13 @@ const createblog = async (req, res)=>{
         if (Object.keys(req.body).length == 0) {
             return res.status(400).send({ Error: "Body  should be not emety" })
         }
+        let body = req.body
+        if(!(body.title && body.body && body.authorId  && body.category && body.subcategory && body.tags)){
+            return res.status(400).send({status:false,msg:" Body must contain title , body ,authorId ,caregory , subcategory and tags !"})
+        }
+
         let id=req.body.authorId
+        
         let author=await Authormodel.findById(id)
         if(!author){
             return res.status(404).send({status:false,msg:"User not found"})
@@ -97,7 +103,9 @@ const blogsUpdate = async (req,res)=> {
         } 
         let tag=blogid.tags //[]
         tag.push(tags)
+        console.log(tag);
         let subcat=blogid.subcategory
+        console.log(subcat);
         subcat.push(subcategory)
          blog = await Blogmodel.findOneAndUpdate({_id : id}, {$set :{title:title , body:body, tags: tag , subcategory:subcat , isPublished :true ,ispublishedAt:Date.now()} } ,{new : true} );
          res.status(200).send({status:true,data:blog})
