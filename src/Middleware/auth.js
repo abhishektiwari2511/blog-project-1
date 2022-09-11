@@ -47,6 +47,9 @@ const filter = async (req, res, next) => {
             if (!blog) {
                 return res.status(404).send({ status: false, msg: "blog is not found given filter" })
             }
+            if(Object.keys(filter).length==0){
+                return res.status(400).send({status:false,msg:"Query is required!!"})
+            }
             if(blog.isDeleted==true){
                 return res.status(400).send({status:false, msg:"Already Deleted !!"})
             }

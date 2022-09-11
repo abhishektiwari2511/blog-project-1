@@ -41,11 +41,11 @@ const login = async function (req, res) {
         let email = req.body.email
         let password = req.body.password
         let data = req.body
-        if (Object.keys(data).length == 0) return res.status(400).send({ status: false, msg: "no input provid" })
+        if (Object.keys(data).length == 0) return res.status(400).send({ status: false, msg: "Email and Password Required !" })
         if (!email) return res.status(400).send({ status: false, msg: "email is required" })
         if (!password) return res.status(400).send({ status: false, msg: "password is required" })
         const user = await authorModel.findOne({ email: email, password: password })
-        if (!user) return res.status(400).send({ status: false, msg: "user are not exsit" })
+        if (!user) return res.status(400).send({ status: false, msg: "Email or Password Invalid Please try again !!" })
         const token = jwt.sign({
             userId: user._id.toString(),
             batch: "plutonium",

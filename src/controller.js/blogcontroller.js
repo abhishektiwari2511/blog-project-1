@@ -1,5 +1,7 @@
 const Blogmodel = require('../Model.js/Blogmodel')
 const Authormodel = require('../Model.js/Authormodel')
+const mongoose=require('mongoose')
+let Objectid=mongoose.Types.ObjectId
 const createblog = async (req, res) => {
     try {
         if (Object.keys(req.body).length == 0) {
@@ -31,12 +33,14 @@ const getblogs = async (req, res) => {
         
         if (query) {
             let blogs = await Blogmodel.find({ $and: [query, { isDeleted: false }, { isPublished: true }] })
-            blogs.length == 0 ? res.status(404).send({ status: false, msg: "Blog are not found" }) : res.send({ status: true, data: blogs })
+            
+             return blogs.length == 0 ?  res.status(404).send({ status: false, msg: "Blog are not found" }) : res.send({ status: true, data: blogs })
         }
         else {
             let blogs = await Blogmodel.find({ isDeleted: false, isPublished: true })
-            blogs.length == 0 ? res.status(404).send({ status: false, msg: "Blog are not found" }) : res.send({ status: true, data: blogs })
+            return blogs.length == 0 ? res.status(404).send({ status: false, msg: "Blog are not found" }) : res.send({ status: true, data: blogs })
         }
+        
     } catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
 
@@ -46,14 +50,17 @@ const getblogs = async (req, res) => {
 
 const blogsUpdate = async (req, res) => {
     try {
-        let id = req.params.blogid
+        let id=req.params.blogid
         let title = req.body.title
         let body = req.body.body
         let tags = req.body.tags
         let subcategory = req.body.subcategory
+        let isPublished=req.body.isPublished
         if (Object.keys(req.body).length == 0) {
             return res.status(400).send({ Error: "Body  should be not empty" })
         }
+        
+
         let blogid = await Blogmodel.findById(id)
         if (blogid.isDeleted == true) {
             return res.status(404).send({ status: false, msg: " This document already Deleted !!" })
@@ -62,7 +69,7 @@ const blogsUpdate = async (req, res) => {
         tag.push(tags)
         let subcat = blogid.subcategory
         subcat.push(subcategory)
-        blog = await Blogmodel.findOneAndUpdate({ _id: id }, { $set: { title: title, body: body, tags: tag, subcategory: subcat, isPublished: true, ispublishedAt: Date.now() } }, { new: true });
+        blog = await Blogmodel.findOneAndUpdate({ _id: id }, { $set: { title: title, body: body, tags: tag, subcategory: subcat, isPublished: isPublished, ispublishedAt: Date.now() } }, { new: true });
         res.status(200).send({ status: true, data: blog })
     } catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
@@ -98,14 +105,15 @@ const deleted = async function (req, res) {
 const deleteblog = async function (req, res) {
 
     try {
-        let query = req.query
+       
+        let query=req.query
         if (query) {
             let blog = await Blogmodel.findOne(query)
             if (!blog) {
                 return res.status(400).send({ status: false, msg: "Blog are not found given query ! " })
             }
             blog = await Blogmodel.findOneAndUpdate(query, { $set: { isDeleted: true, deletedAt: Date.now() } }, { new: true })
-            res.send({ status: true, data: blog })
+            return res.send({ status: true, data: blog })
         }
     }
     catch (error) {
