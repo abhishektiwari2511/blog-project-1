@@ -1,13 +1,8 @@
 const express = require('express');
 var bodyParser = require('body-parser');
-// const cors=require('cors')
-
-
-const { concat } = require("lodash")
 
 const route = require('./routes/route')
 const app = express();
-const http = require("http");
 const mongoose=require('mongoose')
 mongoose.connect("mongodb+srv://Chanchal25-DB:gFTcvqSDyVwmFSO9@cluster0.ypi01as.mongodb.net/project1", {
     useNewUrlParser: true

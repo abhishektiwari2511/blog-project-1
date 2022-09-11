@@ -54,6 +54,7 @@ const blogsUpdate = async (req, res) => {
         let title = req.body.title
         let body = req.body.body
         let tags = req.body.tags
+        let category = req.body.category
         let subcategory = req.body.subcategory
         let isPublished=req.body.isPublished
         if (Object.keys(req.body).length == 0) {
@@ -69,7 +70,7 @@ const blogsUpdate = async (req, res) => {
         tag.push(tags)
         let subcat = blogid.subcategory
         subcat.push(subcategory)
-        blog = await Blogmodel.findOneAndUpdate({ _id: id }, { $set: { title: title, body: body, tags: tag, subcategory: subcat, isPublished: isPublished, ispublishedAt: Date.now() } }, { new: true });
+        blog = await Blogmodel.findOneAndUpdate({ _id: id }, { $set: { title: title, body: body, tags: tag, category:category, subcategory: subcat, isPublished: isPublished, ispublishedAt: Date.now() } }, { new: true });
         res.status(200).send({ status: true, data: blog })
     } catch (error) {
         return res.status(500).send({ status: false, msg: error.message })

@@ -23,6 +23,7 @@ const authmiddleware = async (req, res, next) => {
                 return res.status(400).send({status:false,msg:"Invalid token !"})
             }
             if (valid) {
+                console.log(valid);
                 if (valid.userId == authorId) { //here I checked user have permit to access this resources
                     next()
                 } else {
