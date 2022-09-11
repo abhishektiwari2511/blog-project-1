@@ -19,9 +19,12 @@ const createAuthor = async (req, res) => {
         if (!(body.title && body.fname && body.lname && body.password && body.email)) {
             return res.status(400).send({ status: false, msg: "All field are required !" })
         }
+        if(!(body.title =='Mr'|| body.title=='Miss' || body.title=='Mrs')){
+            return res.status(400).send({status:false, msg:"Title must Mr , Miss and Mrs !"})
+        }
         let emailvalid = isEmail(body.email)
         if (emailvalid == false) {
-            return res.status(400).send({ status: false, msg: "Invalid email" })
+            return res.status(400).send({ status: false, msg: "Invalid email ! please enter valid email address ! " })
         }
         if (!validator.isStrongPassword(body.password)) {
             return res.status(400).send({ status: false, msg: "Password must be contain 1 uppercase 1 lowercase special char and min 8 length" })
@@ -45,7 +48,7 @@ const login = async function (req, res) {
         if (!email) return res.status(400).send({ status: false, msg: "email is required" })
         if (!password) return res.status(400).send({ status: false, msg: "password is required" })
         const user = await authorModel.findOne({ email: email, password: password })
-        if (!user) return res.status(400).send({ status: false, msg: "Email or Password Invalid Please try again !!" })
+        if (!user) return res.status(401).send({ status: false, msg: "Email or Password Invalid Please try again !!" })
         const token = jwt.sign({
             userId: user._id.toString(),
             batch: "plutonium",

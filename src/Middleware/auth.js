@@ -42,6 +42,7 @@ const filter = async (req, res, next) => {
             return res.status(400).send({ status: false, msg: "Header must be present !" })
         }
         let filter = req.query
+        // filter.isDeleted=false
         if (filter) {
             let blog = await Blogmodel.findOne(filter)
             if (!blog) {
