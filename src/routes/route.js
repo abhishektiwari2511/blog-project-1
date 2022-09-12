@@ -13,7 +13,7 @@ router.post('/blogs', Authmidd.authmid  ,Blogcontroller.createblog)
 router.get('/blogs' , Authmidd.authmid ,Blogcontroller.getblogs)
 router.put('/blogs/:blogid',authmiddleware.authmiddleware ,Blogcontroller.blogsUpdate)
 router.delete("/blogs/:blogid" ,authmiddleware.authmiddleware ,Blogcontroller.deleted)
-router.delete('/deletekar',authmiddleware.filter, Blogcontroller.deleteblog)
+router.delete('/blogs',authmiddleware.filter, Blogcontroller.deleteblog)
 router.post("/login",authorController.login)
 
 module.exports = router;
