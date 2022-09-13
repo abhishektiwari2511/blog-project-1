@@ -13,14 +13,14 @@ const blogmodelschema=mongoose.Schema({
     type:ObjectId,
     ref:'Authormodel'
   },
-  tags:[],
+  tags:[String],
   category:{
     type:String,
     required:true
   },
   subcategory:{
-    type:[],
-    required:true
+    type:[String],
+    
   },
   isPublished:{
     type:Boolean,

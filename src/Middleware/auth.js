@@ -20,14 +20,14 @@ const authmiddleware = async (req, res, next) => {
         }
         jwt.verify(token,"this is a secreat key" , function (err, valid) {
             if (err) {
-                return res.status(400).send({status:false,msg:"Invalid token !"})
+                return res.status(403).send({status:false,msg:"Invalid token !"})
             }
             if (valid) {
-                console.log(valid);
+                
                 if (valid.userId == authorId) { //here I checked user have permit to access this resources
                     next()
                 } else {
-                    return res.status(401).send({ status: false, msg: "you have not authorized person!!" })
+                    return res.status(403).send({ status: false, msg: "you have not authorized person!!" })
                 }
             }
         });
@@ -38,7 +38,7 @@ const authmiddleware = async (req, res, next) => {
 
 const filter = async (req, res, next) => {
     try {
-        let token = req.headers['x-api-key']
+        var token = req.headers['x-api-key']
         if (!token) {
             return res.status(400).send({ status: false, msg: "Header must be present !" })
         }
@@ -59,13 +59,13 @@ const filter = async (req, res, next) => {
           
             jwt.verify(token, "this is a secreat key", function (err, valid) {
                 if (err) {
-                    return res.status(400).send({ status: false, msg: "Invalid token !" })
+                    return res.status(403).send({ status: false, msg: "Invalid token !" })
                 }
                 if (valid) {
                     if (valid.userId == authorId) { //here I checked user have permit to access this resources
                         next()
                     } else {
-                        return res.status(401).send({ status: false, msg: "you have not authorized person!!" })
+                        return res.status(403).send({ status: false, msg: "you have not authorized person!!" })
                     }
                 }
             });

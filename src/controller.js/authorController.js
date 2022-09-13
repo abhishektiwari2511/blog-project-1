@@ -1,25 +1,38 @@
 const authorModel = require('../Model.js/Authormodel')
 const jwt = require("jsonwebtoken")
-const validator = require('validator')
+const validator = require('validator');
+const { fn } = require('moment/moment');
 
 function isEmail(emailAdress) {
     let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    // w use for char * use for breakpoint $ for end
     if (regex.test(emailAdress))
         return true;
     else
         return false;
 }
+function hasWhiteSpace(s) {
+    return s.indexOf(' ') >= 0;
+  }
+  
+
+
 
 const createAuthor = async (req, res) => {
     try {
         let body = req.body
-        if (Object.keys(req.body).length == 0) {
-            return res.status(400).send({ Error: "Body  should be not emety" })
+        if (Object.keys(body).length == 0) {
+            return res.status(400).send({ Error: "Body should be not empty" })
         }
-        if (!(body.title && body.fname && body.lname && body.password && body.email)) {
-            return res.status(400).send({ status: false, msg: "All field are required !" })
+       const {fname,lname,title,email,password} = body
+
+        if(!(fname && lname && title && email && password)){
+            return res.status(400).send({status:false,message:"fname ,lname ,title ,email and password required fields"})
         }
-        if(!(body.title =='Mr'|| body.title=='Miss' || body.title=='Mrs')){
+        if(hasWhiteSpace(fname) || hasWhiteSpace(lname) || hasWhiteSpace(email) ||hasWhiteSpace(password) ||hasWhiteSpace(title)){
+            return res.status(400).send({status:false,message:"Whitepase are not allowed in fname, lname ,title, email and password"})
+        }
+        if(!['Mr','Miss','Mrs'].includes(title)){
             return res.status(400).send({status:false, msg:"Title must Mr , Miss and Mrs !"})
         }
         let emailvalid = isEmail(body.email)
@@ -28,6 +41,10 @@ const createAuthor = async (req, res) => {
         }
         if (!validator.isStrongPassword(body.password)) {
             return res.status(400).send({ status: false, msg: "Password must be contain 1 uppercase 1 lowercase special char and min 8 length" })
+        }
+        let checkemail=await authorModel.findOne({email:body.email})
+        if(checkemail){
+            return res.status(400).send({status:false,msg:"Email already exit"})
         }
         let data = new authorModel(req.body)
         let result = await data.save()
