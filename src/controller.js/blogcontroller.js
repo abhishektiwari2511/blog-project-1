@@ -22,12 +22,12 @@ const createblog = async (req, res) => {
             return res.status(404).send({ status: false, msg: "User not found" })
         }
        
-        let data = new Blogmodel(req.body)
-        let result = await data.save()
-        let ig=result._id.toString()
-        if(result.isPublished==true){
-            result =await Blogmodel.findOneAndUpdate({_id:ig},{$set:{ispublishedAt:Date.now()}},{new:true})
+        let data = req.body
+        if(data.isPublished==true){
+            data.ispublishedAt = Date.now()
         }
+        let result = await Blogmodel.create(data)
+     
         res.status(201).send({ status: true, data: result })
     }
     catch (error) {
@@ -88,7 +88,7 @@ const blogsUpdate = async (req, res) => {
           var date=Date.now()
         }
         
-        blog = await Blogmodel.findOneAndUpdate({ _id: id }, { $set: { title: title, body: body, tags: tag, category:category, subcategory: subcat, isPublished: isPublished, ispublishedAt: date } }, { new: true });
+       let  blog = await Blogmodel.findOneAndUpdate({ _id: id }, { $set: { title: title, body: body, tags: tag, category:category, subcategory: subcat, isPublished: isPublished, ispublishedAt: date } }, { new: true });
         res.status(200).send({ status: true, message:"Success", data:blog })
     } catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
@@ -98,13 +98,11 @@ const blogsUpdate = async (req, res) => {
 const deleted = async function (req, res) {
     try {
         //Validate: The blogId is present in request path params or not.
-        if (!ObjectId.isValid(req.params.blogid)) {
-            return res.status(404).send({ status: false, msg: "BlogId invalid !" });
-        }
         let blog_Id = req.params.blogid
+        if (!blog_Id){ return res.status(400).send({ status: false, msg: "Blog Id is required" })
+        }
         
-
-        //Validate: The blogId is valid or not.
+//Validate: The blogId is valid or not.
         let blog = await Blogmodel.findById(blog_Id)
         if (!blog) return res.status(404).send({ status: false, msg: "Blog does not exists" })
 
